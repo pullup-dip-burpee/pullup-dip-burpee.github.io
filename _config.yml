@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "실버스카이의 컴공일상"
+title: "실버스카이 컴공수난기"
 email: qazxdrtgbnj@gmail.com
 name: "silver-sky"
 description: "전공서적 정리"
@@ -28,12 +28,12 @@ twitter_username: jekyllrb
 github_username:  jekyll
 
 # Build settings
-#theme: minima
-#plugins:
-#  - jekyll-feed
+theme: minima
+plugins:
+ - jekyll-feed
 
-remote_theme : mmistakes/minimal-mistakes
-minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+# remote_theme : mmistakes/minimal-mistakes
+# minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 
 # Exclude from processing.
