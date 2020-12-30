@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "용책 읽기 - Ch.3"
-date:   2020-03-10 20:19:35 +0900
+date:   2020-11-14 20:19:35 +0900
 categories: [textbooks/compiler]
 ---
 
@@ -29,7 +29,7 @@ Translation diagrams를 가지고 lexical analyzer를 만들기. *state*라는 �
 
 ### 3.5 The Lexical-Analyzer Generator *Lex*
 
-
+수업 중 사용한 적이 없으므로 건너뜀.
 
 ### 3.6 Finite Automata
 유한 오토마타. Input string은 우선 유한 오토마타로 바뀐 뒤 다시 syntax analyzer가 다룰 수 있는 형태가 된다.  NFA(Non-deterministic Automata)와 DFA(Deterministic Automata)가 있다. 
