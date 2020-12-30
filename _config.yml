@@ -24,8 +24,7 @@ name: "silver-sky"
 description: "전공서적 메모, 알고리즘 문제풀기, 기타 개발 공부 기록 등을 합니다. "
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://pullup-dip-burpee.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+github_username:  pullup-dip-burpee
 
 # Build settings
 theme: minima
