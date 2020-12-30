@@ -10,8 +10,11 @@ categories: [general]
 
 ## TO-DO LIST
 - 전공서적 정리(과목명 - 책 이름)
-  - 논리설계 - Contemporary Logic Design(2ed)
-  - 컴퓨터구조, 시스템프로그래밍 - CS:APP
-  - 자료구조, 알고리즘 - 
-  - 컴파일러 - 
-  - 
+  - Computer Architecture - CS:APP
+  - Data Structure, Algorithm - 
+  - Compiler - 
+  - Computer Security
+- Web Development
+  - Backend  
+    - Database
+    - Django
