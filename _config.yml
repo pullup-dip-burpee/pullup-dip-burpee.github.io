@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "실버스카이 컴공수난기"
+title: "은천 컴공 메모"
 email: qazxdrtgbnj@gmail.com
 name: "silver-sky"
-description: "전공서적 정리"
+description: "전공서적 메모, 알고리즘 문제풀기, 기타 개발 공부 기록 등을 합니다. "
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://pullup-dip-burpee.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
