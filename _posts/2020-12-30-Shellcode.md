@@ -5,7 +5,6 @@ date:   2020-12-30 20:19:35 +0900
 categories: [ComputerArchitecture]
 ---
 
-# Shellcode란?
 ## Shellcode 튜토리얼
 - 참고링크: [CS6265 튜토리얼](https://tc.gts3.org/cs6265/2020/tut/tut02-warmup2.html#shellcode)  
 - 목표: interactive shell 실행
