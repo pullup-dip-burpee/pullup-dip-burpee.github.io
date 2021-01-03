@@ -11,20 +11,20 @@ categories: [ComputerArchitecture]
 - 목표: interactive shell 실행
 Shellcode란 기본적으로 시스템 해킹, [exploitation(취약점 공격)](https://ko.wikipedia.org/wiki/%EC%B7%A8%EC%95%BD%EC%A0%90_%EA%B3%B5%EA%B2%A9)을 위한 generic [payload](https://ko.wikipedia.org/wiki/%ED%8E%98%EC%9D%B4%EB%A1%9C%EB%93%9C_(%EC%BB%B4%ED%93%A8%ED%8C%85))이다. 
 
-위 링크의 CS6265 튜토리얼에서는 우선 execve를 사용해서 현재 실행중인 프로세스를 바꿔서 정해진 flag를 출력하도록 하고 있다. 
+위 링크의 CS6265 튜토리얼에서는 우선 execve를 사용해서 현재 실행중인 프로세스를 바꿔서 정해진 flag를 출력하도록 합니다.
 
 ## execve란
 
 `int execve(const char *filename, char *const argv[], char *const envp[]);`
 
-이 함수는 현재 실행중인 프로세스의 실행코드를 실행가능한 파일인 filename로 바꾼다. filename 프로그램의 코드를 메모리에 새로 load함으로써, 현재 실행 중인 프로세스의 기능이 filename의 것으로 완전히 바뀐다. 그래서 기존 프로세스는 그대로 두면서 새로운 프로세스를 만드는 fork()와는 구별된다. 
+이 함수는 현재 실행중인 프로세스의 실행코드를 실행가능한 파일인 filename로 바꿉니다. filename 프로그램의 코드를 메모리에 새로 load함으로써, 현재 실행 중인 프로세스의 기능이 filename의 것으로 완전히 바뀝니다. 그래서 기존 프로세스는 그대로 두면서 새로운 프로세스를 만드는 fork()와는 구별됩니다. 
 
-위의 argv는 argument vector, envp는 environment이다. argument가 배열 형태로 따라오고, 또 환경변수로도 따라온다. 
+위의 argv는 argument vector, envp는 environment입니다. argument가 배열 형태로 따라오고, 또 환경변수로도 따라옵니다. 
 
 ## shellcode에서 execve
-
-아래에 코드 1과 코드 2가 있다. 코드 1을 수정해서 flag를 출력할 수 있도록 (코드 2로) 바꾸어야 한다. 그 과정을 보면, 우선 `#define STRING`을 통해서 문자열을 하나 만든다. 그 문자열은 맨 아래의 `.string STRING`에 있다. 이게 특이한 부분인데 보통 실행코드가 위치해야 하는 어셈블리의 부분에 문자열이 있게 된다.  
-STRING을 코드 2와 같이 고치면 어떻게 될까? 다른 부분도 고쳐야 하기는 하지만, 결론을 말하면 `/bin/sh`를 실행하던 코드가 `/bin/cat`을 실행하고, 그 `/bin/cat`의 argument로 `/proc/flag`를 넘겨줘서 flag가 출력되게 된다. 
+### 32비트 코드
+우선 32비트 버전입니다. 아래에 코드 1과 코드 2가 있는데, 코드 1을 수정해서 flag를 출력할 수 있도록 (코드 2로) 바꾸어야 합니다. 그 과정을 보면, 우선 `#define STRING`을 통해서 문자열을 하나 만듭니다. 그 문자열은 맨 아래의 `.string STRING`에 있습니다. 이게 특이한 부분인데 보통 실행코드가 위치해야 하는 어셈블리의 부분에 문자열이 있습니다.  
+STRING을 코드 2와 같이 고치면 어떻게 될까요? 다른 부분도 고쳐야 하기는 하지만, 결론을 말하면 `/bin/sh`를 실행하던 코드가 `/bin/cat`을 실행하고, 그 `/bin/cat`의 argument로 `/proc/flag`를 넘겨줘서 flag가 출력됩니다. 
 
 - 코드 1의 개요도
     ```
@@ -142,3 +142,8 @@ STRING을 코드 2와 같이 고치면 어떻게 될까? 다른 부분도 고쳐
 
     ```
 
+### 64비트 코드
+64비트 코드도 대체로 같습니다. 다만 레지스터들이 rdi, rsi, rdx, ... 하는 식으로 바뀌고, 주소값이 64비트로 바뀌고, `int 80` 대신 `syscall`을 이용하는 등의 차이가 있습니다. (`int 80`은 먹히기는 하는데 `syscall`이 더 빨라서, 64비트 머신에서는 `syscall`이 권장된다고 합니다.)
+
+## 유용한 명령어들
+- `strace`, `ltrace` : system call 내역을 나열합니다. 
