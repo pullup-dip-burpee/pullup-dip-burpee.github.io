@@ -42,9 +42,17 @@ cc로 컴파일 시 `-fstack-protector`, `-fnostack-protector` 중 무엇을 주
 
 ssp가 적용되면 stack 내부의 값들의 순서가 아래와 같이 바뀝니다. return address를 덮어쓰기 위해서는 canary 값을 바꾸어야 하는데, canary 값이 변조된 것이 감지되기 때문에 return address를 덮어쓸 수 없습니다. 
 
-![스택까나리](/images/computersecurity/stack-canary.png)
+![스택까나리](/images/computersecurity/stack-canary.png)  
 (이미지출처: https://access.redhat.com/blogs/766093/posts/3548631)
 
-실습에서는 이 canary 값을 알아내기 쉽게 해서 해당 canary 부분에 맞는 canary 값까지 입력값으로 넣습니다. 
+실습에서는 이 canary 값을 알아내기 쉽게 만들고 해당 canary 부분에 맞는 canary 값까지 입력값으로 넣거나, canary를 덮어쓰지 않고 우회하는 방법 등을 배웁니다. 
 
+# 예시
+
+ASLR이 없다는 가정 아래에서 파훼법입니다. 
+
+1. 카나리 값이 고정되어 있는 경우  
+    그 값을 카나리 위치에 넣어서 buffer overflow 공격을 합니다.
+2. 카나리 값은 변경되지만 우회할 수 있는 경우  
+    가령 input을 읽어들이는 read 등의 함수가, canary보다 destination을 설정하는 값을 먼저 건드린다면, 해당 값을 잘 살펴서 임의의 메모리 주소에 입력을 넣을 수 있습니다. return address 주소부터 덮어쓰는 것도 가능합니다. 
 
