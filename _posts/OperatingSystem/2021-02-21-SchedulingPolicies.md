@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Scheduling Policies"
+title:  "[OS]Scheduling Policies"
 date:   2021-02-21 13:19:35 +0900
 categories: [OperatingSystem]
 ---
@@ -13,6 +13,7 @@ OS scheduler는 CPU resource를 여러 프로세스에 잘 할당하기 위해 s
 # SJF(Shortest-Job-First)
 
 process 들이 동시에 arrive한 경우 짧은 걸 먼저 합니다. 하지만 non-preemptive라서, 긴 게 먼저 도착하는 경우 여전히 짧은 것들이 뒤에서 막히는 문제가 있습니다. 
+
 # STCF(Shortest Time to Completion First) == SRTF(Shortest Remaining Time First)
 SJF의 보완인데 preemptive 합니다. 
 
