@@ -2,7 +2,7 @@
 layout: post
 title:  "용책 읽기 - Ch.3"
 date:   2020-11-14 20:19:35 +0900
-categories: [textbooks/compiler]
+categories: Compiler
 ---
 
 
