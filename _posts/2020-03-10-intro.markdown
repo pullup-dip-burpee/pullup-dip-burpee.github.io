@@ -2,7 +2,8 @@
 layout: post
 title:  "메모장"
 date:   2020-03-10 20:19:35 +0900
-categories: [general]
+author: silverysky
+categories: general
 ---
 
 전공 공부 메모장 용도 블로그. 
