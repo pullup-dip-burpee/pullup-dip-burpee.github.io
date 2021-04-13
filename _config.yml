@@ -54,11 +54,11 @@ jekyll-archives:
 
 # Category descriptions (for archive pages)
 descriptions:
-  - cat: Computer Architecture
+  - cat: ComputerArchitecture
     desc: "Computer System: A Programmer's Perspective로 배운 내용입니다."
 
   - cat: Algorithm
-    desc: "알고리즘 이것저것 푼 흔적입니다. "
+    desc: "알고리즘 문제들 이것저것 푼 흔적입니다."
 
 # Social icons and sharing options
 #
