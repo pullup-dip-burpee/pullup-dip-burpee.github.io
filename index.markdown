@@ -5,3 +5,12 @@
 layout: home
 author_profile: true
 ---
+
+# 메모 목록
+- Operating System
+- Algorithm
+- Computer Architecture
+- Rust
+- Web
+- Compiler
+- IoT
