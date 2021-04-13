@@ -103,16 +103,23 @@ C/C++에서의 macro와는 좀 달라보이는데? `println!("Hello world")` 같
     let a: [i32; 5] = [1, 2, 3, 4, 5];
     }
     ```
-- index out of bounds를 컴파일 타임에 잡아줍니다. panic 낼 수 있는 코드를 잡습니다. 가령 위의 array에서 `let elem = a[10];` 같은거.
+- index out of bounds를 컴파일 타임에 잡아줍니다. panic 낼 수 있는 코드를 잡습니다. 가령 위의 array에서 `let elem = a[10];` 이라고 했으면, 런타임이 아닌 컴파일 타임에 out of bound를 잡습니다. 
 
----
+-----
+
 # Functions
 
+```rust
+fn five() -> i32 {
+    5
+}
 
---- 
-# 반복문, 제어문 등 
-- `match`: C/C++의 switch-case문
-- 
+fn main() {
+    let x = five();
 
+    println!("The value of x is: {}", x);
+}
+```
 
+위 코드와 같이 리턴 값의 데이터 타입을 `-> i32`같은 식으로 작성합니다. `fn five()`에는 세미콜론 없이 5 하나만 있는데, 이것도 `return 5`와 동일하게 취급됩니다. 세미콜론을 쓰면 에러를 냅니다. 
 

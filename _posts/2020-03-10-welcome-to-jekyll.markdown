@@ -6,12 +6,14 @@ categories: [general]
 ---
 
 # TO-DO LIST
-- 전공서적 정리(과목명 - 책 이름)
+- 전공 정리
   - Computer Architecture - CS:APP
   - Data Structure, Algorithm - 
   - Compiler - 
   - Computer Security
-
+  - Comtemporary Logic Design
+  - Operating System
+  
 - Web Development
   - Backend  
     - Database

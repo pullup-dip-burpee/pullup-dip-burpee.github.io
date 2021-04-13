@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Dynamic Programming"
+title:  "[PS]Dynamic Programming"
 date:   2021-02-17 20:19:35 +0900
 categories: [Algorithm]
 ---
