@@ -1,17 +1,45 @@
 ---
 layout: post
-title:  "[OS]Synchronization - Locks"
+title:  "[OS]Synchronization and Locks"
 date:   2021-03-01 13:19:35 +0900
 categories: [OperatingSystem]
 ---
 
-OSTEP을 읽고 메모합니다.
+OSTEP을 읽고 강의를 들으면서 메모합니다.
 
 - references: [book](), [code](https://github.com/remzi-arpacidusseau/ostep-code/tree/master/threads-locks)
 
+# Synchronization이란
+Concurrent하게 여러 개의 프로세스나 스레드를 실행할 때 오작동하지 않게 하기 위해 해주는 일입니다. 대표적인 오작동으로는 A, B 두 개의 프로세스가 있을 때 A의 어떤 작업을 하던 도중 instruction들의 순서가 섞여버려서, 서로 같은 shared data에 접근해 잘못된 데이터를 읽거나 쓰는 등의 race condition이 있고, 또 A 프로세스만 계속 실행되고 B가 실행이 안 되는 starvation 상황이 있을 수 있습니다. 
+
+- 아래 코드에서 어떻게 하면 panic이 일어날 수 있을까요? 
+    ```C
+    //Thread 1
+    p = someComputation();
+    pInitialized = true;
+
+    //Thread 2
+    while(!pInitialized)
+        ;
+    q = anotherComputation(p);
+    if (q != anotheromputation(p));
+        panic
+    ```
+    컴파일러는 Thread 1에서 변수를 initialize 하는 부분을 앞에다가 배치해버릴 수가 있습니다. `pInitialized = true`가 먼저 실행되어 버리면, Thread 2에서 `q = anotherComputation(p);` 이 실행된 후 `p = someComputation();`가 실행되고 다시 `if (q != anotheromputation(p));`로 들어가서 panic까지 갈 수 있습니다. 
+
 # 문제상황: race condtion, starvation
 
-아래의 코드를 컴파일해서 실행시키면 balance가 0이 되지 않고 제멋대로인 값이 나옵니다. 멀티스레딩에서 생기는 문제. `++balance`
+- Race Condition: concurrent program의 결과가 스레드 간의 operation의 순서에 따라 달라지는 버그입니다. 
+- 가령 아래의 코드를 컴파일해서 실행시키면 balance가 0이 되지 않고 제멋대로인 값이 나옵니다. 멀티스레딩에서 생기는 문제. `++balance`가 atomic하지 않고, 어셈블리 레벨로 가면 3개의 어셈블리 operation이 합쳐진 것이기 때문에 그렇습니다. 
+
+```assembly
+//++balance
+mov &balance, %eax
+add $0x1, %eax
+mov %eax, &balance
+```
+
+그럼 아래의 코드를 실행시킬 때 결과가 0이 아니라 제멋대로 나오게 됩니다. 
 
 ```C
 #include <stdio.h>
@@ -19,28 +47,36 @@ OSTEP을 읽고 메모합니다.
 
 static int balance = 0;
 
-void (){
-    ++balance;
+void* deposit(void *arg){
+    int i;
+    for (i=0; i<1e7; ++i)
+        ++balance;
 }
 
-void withdraw() {
-    --balance;
+void* withdraw(void *arg) {
+    int i;
+    for (i=0; i<1e7; ++i)
+        --balance;
 }
 
 int main(void){
-    thread_create()
-    thread_create()
-    thread_join
-    thread_join
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, deposit, (void*)1);
+    pthread_create(&t2, NULL, deposit, (void*)2);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
 
     printf("balance: %d\n", balance);
     return 0;
 }
 ```
+
+
 # 해결방법 - Lock 걸기
 
 - 잘못된 방법: race condition 유발
   - 아래의 lock 함수 안에서 while 문이 끝난 뒤에 interrupt 발생해서 다른 thread로 switch되고, lock이 넘어간다면? 
+
 
 ```C
 typedef struct __lock_t {
@@ -62,7 +98,7 @@ void unlock(lock_t *mutex) {
 }
 ```
 
-- SW만으로는 온전히 atomicity 지원하기 어려워서 HW의 도움 필요. 아래와 같음. 
+- SW만으로는 온전히 atomicity 지원하기 어려워서 HW의 도움이 필요합니다. 대표적으로 TestAndSet과 CompareAndSwap이 있습니다.  
 
 ```C
 int TestAndSet (int *old_ptr, int new) {
@@ -72,7 +108,7 @@ int TestAndSet (int *old_ptr, int new) {
 }
 ```
 
-위 코드를 이용해서 아래와 같은 lock 사용 가능
+- 위 코드를 이용해서 아래와 같은 lock 사용 가능하빈다. 
 
 ```C
 typedef struct __lock_t {
@@ -93,7 +129,7 @@ void unlock(lock_t *lock) {
 }
 ```
 
-`TestAndSet` 대신 아래와 같이 `CompareAndSwap`을 사용할 수도 있음. 이 방식은 "lock-free synchronization"등에서 나오지만, 더 강력함. 
+- `TestAndSet` 대신 아래와 같이 `CompareAndSwap`을 사용할 수도 있는데, 이 방식은 "lock-free synchronization"등에서 나오지만, 더 강력합니다.
 
 
 ```C
