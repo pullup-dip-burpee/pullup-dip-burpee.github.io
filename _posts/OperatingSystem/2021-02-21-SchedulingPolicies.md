@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[OS]Scheduling Policies"
+title:  "[OS]Concurrency(4) - Scheduling Policies"
 date:   2021-02-21 13:19:35 +0900
 categories: [OperatingSystem]
 ---
