@@ -173,7 +173,7 @@ void unlock() {
 ```
 
 - 아래는 queues를 사용하는 방법. 
-  - spin만 쓰거나 즉싯 yield CPU 하는 두 방법 모두 리소스 낭비 및 starvation이 있을 수 있어서, queue를 사용해서 해결함. 
+  - spin만 쓰거나 즉시 yield CPU 하는 두 방법 모두 리소스 낭비 및 starvation이 있을 수 있어서, queue를 사용해서 해결함. 
   - `park()`는 스레드를 재우고 `unpark(threadID)`는 깨움. 
   - lock_t 구조체가 queue와 guard를 가지고 있음. guard는 spin lock으로 쓰이는데, spinning에 쓰이는 시간을 제한함. 우선 thread가 guard lock을 얻으면, 실제 lock(flag)을 얻을 수 있는지 확인. 얻을 수 있으면 lock을 얻고 guard lock는 0으로 돌림. 그렇지 않으면 queue에 thread id를 넣고, guard lock을 0으로 돌리고, park()로 스레드를 재움. 
   
