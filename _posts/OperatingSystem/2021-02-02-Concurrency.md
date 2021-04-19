@@ -14,7 +14,7 @@ categories: [OperatingSystem]
 1. address space가 같습니다. 즉, context switch에서 사용 중인 page table을 바꿀 필요가 없습니다. 
 2. stack에 있어서 싱글스레드 프로그램에서는 address space에 스택이 하나만 있지만, 멀티스레드 프로그램에는 스레드마다 하나씩 해서 여러 개의 스택이 있습니다.
 
-![single_threaded_and_multi_threaded_address_space](../../images/OS/single_threaded_and_multi_threaded_address_space.png
+![single_threaded_and_multi_threaded_address_space](/images/OS/single_threaded_and_multi_threaded_address_space.png
 )
 
 
@@ -53,10 +53,13 @@ voluntary context switch에는 `thread_yield`, `thread_join` 등의 경우가 �
 # User-level Threads
 - kernel support를 통해 user-level thread 구현
     - Hybrid Thread Join
-    - Per-process Kernel Threads
+    - Per-process Kernel Threads: 코어마다 kernel thread를 하나씩 생성하고 user thread는 이걸 공유해서 사용합니다. 
     - Scheduler Activations: 윈도우에서 도입했다고 합니다. 
-    
+
 - kernel support 없이 user-level thread 구현할 경우 장단점은? (green thread 등이 있는데, 라이브러리가 context switch를 합니다)
     - 장: ?
-    - 단: 너무 많습니다. 
+    - 단: 너무 많습니다. 가령, 하나의 user thread가 blocking을 하면 나머지도 다 쉬어야 합니다. 
 
+# Alternative Abstractions
+## Asynchronous I/O
+## Data parallel programming
