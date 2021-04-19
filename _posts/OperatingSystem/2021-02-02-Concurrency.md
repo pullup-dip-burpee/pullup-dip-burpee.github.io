@@ -61,5 +61,7 @@ voluntary context switch에는 `thread_yield`, `thread_join` 등의 경우가 �
     - 단: 너무 많습니다. 가령, 하나의 user thread가 blocking을 하면 나머지도 다 쉬어야 합니다. 
 
 # Alternative Abstractions
-## Asynchronous I/O
+## Asynchronous I/O and Event-Driven Programming
+Thread 대신 event를 사용해서 
 ## Data parallel programming
+data set의 서로 다른 부분에 접근하게 해서 병렬적으로 데이터에 대한 연산을 수행합니다. 
