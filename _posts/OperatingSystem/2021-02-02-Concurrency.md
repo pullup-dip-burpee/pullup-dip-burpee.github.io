@@ -62,6 +62,16 @@ voluntary context switch에는 `thread_yield`, `thread_join` 등의 경우가 �
 
 # Alternative Abstractions
 ## Asynchronous I/O and Event-Driven Programming
-Thread 대신 event를 사용해서 
+Thread 대신 event를 이용합니다. single-threaded program이 latency가 긴 I/O 장치 요청이 오면 I/O를 다른 processing을 가지고 overlapping합니다. 
+- event-driven programming vs. threads
+- 둘의 차이? 
+    - state가 연속적인지 / TCB에 담기는지의 차이
+    - state save/store가 명시적으로 앱에 의해 처리되는지 / thread system에 의해 자동으로 처리되는지의 차이
+- 장단점? 
+    - performance: high-latency I/O devices 를 다루는 데에는 event-driven이 더 좋을 수 있습니다. 
+    - performance: 멀티코어를 잘 쓰기 위해서는 스레드가 좋습니다. 
+    - responsiveness: 스레드는 어떤 일을 background로 돌리기가 쉬워서 더 responsiveness가 좋습니다. 
+    - program structure: thread를 사용하는 편이 각 task 처리를 독립적이고 병렬적으로 생각할 수 있어서 프로그래밍이 더 쉽다고 합니다. 
+
 ## Data parallel programming
 data set의 서로 다른 부분에 접근하게 해서 병렬적으로 데이터에 대한 연산을 수행합니다. 
